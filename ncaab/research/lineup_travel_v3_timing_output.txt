@@ -1,0 +1,70 @@
+training rows 33110 (2008-2021, 12 seasons) | test rows with a book opener 13837, flipped dropped 23, |open-close|>10 dropped 0, kept 13814
+book        season  b2b  
+DraftKings  2024    False    4157
+                    True      208
+            2026    False    4213
+                    True      269
+ESPN BET    2024    False     192
+                    True       33
+            2025    False    4298
+                    True      307
+            2026    False     113
+                    True       24
+
+==================== v3: matched bet counts (DK 2024 + 2026, timing-guarded) ====================
+games 8370 {2024: 4157, 2026: 4213}
+ q 1% model A: 85 bets, hit 0.607, units +13.4 {2024: 14.4, 2026: -1.0}, CLV +1.776 [90% +1.406, +2.188], total CLV 151.0
+ q 1% model B: 85 bets, hit 0.627, units +16.3 {2024: 7.7, 2026: 8.5}, CLV +1.694 [90% +1.271, +2.124], total CLV 144.0
+   D = CLV(B) - CLV(A) = -0.082 [90% -0.394, +0.332] | overlap 53 of A 85 / B 85
+ q 2% model A: 169 bets, hit 0.545, units +6.7 {2024: 9.6, 2026: -2.9}, CLV +1.405 [90% +1.151, +1.678], total CLV 237.5
+ q 2% model B: 169 bets, hit 0.566, units +13.5 {2024: 10.6, 2026: 2.8}, CLV +1.417 [90% +1.118, +1.710], total CLV 239.5
+   D = CLV(B) - CLV(A) = +0.012 [90% -0.228, +0.295] | overlap 94 of A 169 / B 169
+ q 5% model A: 419 bets, hit 0.529, units +4.2 {2024: 9.0, 2026: -4.8}, CLV +0.955 [90% +0.802, +1.111], total CLV 400.0
+ q 5% model B: 419 bets, hit 0.522, units -1.6 {2024: 12.7, 2026: -14.4}, CLV +1.086 [90% +0.932, +1.243], total CLV 455.0
+   D = CLV(B) - CLV(A) = +0.131 [90% -0.020, +0.253] | overlap 239 of A 419 / B 419
+ q 10% model A: 838 bets, hit 0.543, units +30.2 {2024: 18.8, 2026: 11.4}, CLV +0.789 [90% +0.681, +0.895], total CLV 661.5
+ q 10% model B: 838 bets, hit 0.530, units +9.2 {2024: 16.9, 2026: -7.7}, CLV +0.826 [90% +0.722, +0.936], total CLV 692.0
+   D = CLV(B) - CLV(A) = +0.036 [90% -0.046, +0.136] | overlap 507 of A 838 / B 838
+
+R1 (q 2%: D > 0 and 90% low > 0): False (D +0.012, low -0.228)
+R2 (D > 0 at >= 3 of 4 fractions): True ([np.float64(-0.082), np.float64(0.012), np.float64(0.131), np.float64(0.036)])
+R3 (B at q 2%: CLV >= 0.67, low > 0, units > 0, no season < -5u): True (CLV +1.417, low +1.118, units +13.5 {2024: 10.6, 2026: 2.8})
+v3 VERDICT: FAIL
+
+ v3 secondary, ESPN BET 2025 (decides nothing):
+  q 2% model A: 86 bets, CLV +1.738, units +13.3
+  q 2% model B: 86 bets, CLV +1.285, units +11.4
+
+==================== Bet timing: opener or wait for the close ====================
+training LOSO points gained by t: {0: np.float64(5.0), 0.25: np.float64(39.5), 0.5: np.float64(2.0), 0.75: np.float64(0.0)}
+chosen t = 0.25
+ [layer move model] base bets 2483, waited 11 (0.4%); points gained total +11.0 [90% +4.0, +19.0], mean per waited bet +1.000 | units: always opener -20.0, timing -16.2, always close -84.6
+          bets  waited  gain  u_open  u_timing  u_close
+season                                                 
+2024    1167.0     5.0   1.0    37.9      39.8      9.6
+2026    1316.0     6.0  10.0   -57.9     -56.0    -94.2
+ [base-gap-only move model] base bets 2483, waited 0 (0.0%); points gained total +0.0 [90% +nan, +nan], mean per waited bet +nan | units: always opener -20.0, timing -20.0, always close -84.6
+          bets  waited  gain  u_open  u_timing  u_close
+season                                                 
+2024    1167.0     0.0   0.0    37.9      37.9      9.6
+2026    1316.0     0.0   0.0   -57.9     -57.9    -94.2
+
+T1 points gained > 0, 90% low > 0: True (+11.0, low +4.0)
+T2 units timing >= always opener: True (-16.2 vs -20.0)
+T3 layer gains more than base-gap-only: True (+11.0 vs +0.0)
+TIMING VERDICT: PASS (weaker evidence: seen seasons)
+
+ timing secondary, ESPN BET 2025 (decides nothing): base bets 1241, waited 8, gained -4.0, units opener -23.0 timing -23.0
+
+==== Check + post-hoc context (NOT registered; decides nothing) ====
+recheck q 1% A: n 85 CLV +1.776 units +13.4
+recheck q 1% B: n 85 CLV +1.694 units +16.3
+recheck q 2% A: n 169 CLV +1.405 units +6.7
+recheck q 2% B: n 169 CLV +1.417 units +13.5
+recheck q 5% A: n 419 CLV +0.955 units +4.2
+recheck q 5% B: n 419 CLV +1.086 units -1.6
+recheck q 10% A: n 838 CLV +0.789 units +30.2
+recheck q 10% B: n 838 CLV +0.826 units +9.2
+timing base bets (model A, k 1): n 2483, CLV at opener +0.549 (share > 0 0.51), units opener -20.0
+waited bets: n 11, gain +11.0, units opener -3.4 vs at close +0.5
+predicted move in bet direction m: share <= -0.25 0.0044 | quantiles {0.01: -0.16, 0.05: -0.0, 0.5: 0.27, 0.95: 0.6}

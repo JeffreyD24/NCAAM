@@ -4,9 +4,13 @@ Opened Nov 5, 2026 (first entries from the lineup/injury/travel layer). Test on 
 
 - [x] **Layer vs a bettable price (second pre-registration): DONE Nov 5, FAIL on Q4** (`research/LINEUP_INJURY_TRAVEL_OPENER_RESULTS_2026-11-05.md`):
       151 bets at DK opener, CLV +1.49 [90% +1.17], +9.5u, layer beat-the-opener t +3.89, but mean CLV below the base-only model (1.85 on 60 bets).
-- [ ] **[LEAD] Layer as a line-move forecaster for bet timing.** Layer part predicts DK's opener-to-close move (t +7.85, 8,370 games). Pre-register: among
-      base-model bets, bet at the opener when the layer predicts a move our way, otherwise wait for a better number; grade CLV and units at the price taken.
-- [ ] **[LEAD] v3 with a fair B-vs-A comparison** (matched bet counts / total CLV, chosen in training). Jeffrey's call; same DK seasons seen twice, so weaker evidence.
+- [x] **Layer as a bet-timing tool: DONE Nov 5, registered PASS but immaterial** (`research/LINEUP_INJURY_TRAVEL_V3_TIMING_RESULTS_2026-11-05.md`): waited on
+      11 of 2,483 base bets (+11 points, +3.8u). Fable review of a "wait" flag only if Jeffrey wants it (Claude: not worth it).
+- [x] **v3 matched B-vs-A comparison: DONE Nov 5, FAIL** (same file): at equal bet counts B's CLV = A's (D +0.01 at 2%). Layer dropped as a stand-alone bet signal.
+- [ ] **[IDEA] Layer features in the three-target CLOSE model** (`three_targets_*`): the layer predicts DK's line move (t +7.85), so adding it to C2/C3 should
+      predict the close better. Test on 2023-24 fit / 2025-26 as before, or leave-one-season-out on SBR closes.
+- [ ] **[LEAD] Base model alone at DK's opener, top 1-2% of games:** CLV +1.4 to +1.8 on 85-169 bets, small positive units (third look at these seasons).
+      Consistent with the book-opener test (CLV +1.26, flat units). A forward test needs new seasons of DK openers (2026-27 TEST record is building).
 - [ ] **[LEAD] Base gap beats the close.** Blend(M2, M8, MKT) minus the close predicts actual - close (slope +0.27, corr +0.065; DK closes 2024-26 +0.035);
       gap-only bets at the close hit 53.5% (break-even 52.4%). Contradicts "only the opener makes money". Pre-register a forward test (fit on earlier seasons)
       with CLV vs the bettable opener; check what the gap is (line shading? stale SBR snapshot time?).
