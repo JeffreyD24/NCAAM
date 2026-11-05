@@ -1,0 +1,53 @@
+training rows 33110 (2008-2021, 12 seasons) | test rows with a book opener 13837, flipped dropped 23, |open-close|>10 dropped 0, kept 13814
+book        season  b2b  
+DraftKings  2024    False    4157
+                    True      208
+            2026    False    4213
+                    True      269
+ESPN BET    2024    False     192
+                    True       33
+            2025    False    4298
+                    True      307
+            2026    False     113
+                    True       24
+[train LOSO, model A] k 0.5: 17782 bets CLV +0.295 units +52.8 | k 1: 8196 bets CLV +0.376 units +179.2 | k 1.5: 3372 bets CLV +0.469 units +166.7 | k 2: 1408 bets CLV +0.475 units +98.0 | k 3: 362 bets CLV +0.468 units +56.5  -> k = 3
+[train LOSO, model B] k 0.5: 20199 bets CLV +0.314 units +301.5 | k 1: 10687 bets CLV +0.408 units +378.6 | k 1.5: 5186 bets CLV +0.484 units +326.4 | k 2: 2408 bets CLV +0.551 units +252.2 | k 3: 592 bets CLV +0.590 units +116.8  -> k = 3
+blend weights (1, M2, M8, MKT): [-0.704  0.494  0.213  0.386]
+model B standardized coefficients (gap, lost_min_share, lost_pts_share, new_starters, travel_miles, tz_shift, rest_days, back_to_back, games_last_7): [ 1.145 -0.167 -0.321 -0.044 -0.088 -0.116 -0.243 -0.384 -0.033]
+
+==== TEST: DraftKings openers, 2024 + 2026, timing-guarded (headline) ====
+games 8370 {2024: 4157, 2026: 4213}
+  [DK headline] model A k 3: 60 bets, hit 0.593, units +7.8 (ROI +0.130), CLV +1.850 [90% +1.392, +2.333] | units by season {2024: 9.3, 2026: -1.5} | CLV by season {2024: 1.82, 2026: 1.88}
+  [DK headline] model B k 3: 151 bets, hit 0.557, units +9.5 (ROI +0.063), CLV +1.487 [90% +1.172, +1.805] | units by season {2024: 4.3, 2026: 5.2} | CLV by season {2024: 1.51, 2026: 1.47}
+  beat-the-opener slope: layer part +0.748 (t +3.89) | layer part vs line move (close-opener) +0.221 (t +7.85) | full A +0.400 (t +3.10) | full B +0.519 (t +4.84)
+  RMSE vs result: DK opener 11.224 | DK close 11.170 | model A 11.237 | model B 11.226
+
+==== PASS / FAIL (model B) ====
+Q1 CLV >= 0.67 and 90% low > 0: True (CLV +1.487, low +1.172)
+Q2 units > 0 and no season < -5u: True (units +9.5, by season {2024: 4.3, 2026: 5.2})
+Q3 layer beat-the-opener slope > 0, t > 2: True (slope +0.748, t +3.89)
+Q4 CLV B >= CLV A: False (B +1.487 vs A +1.850)
+VERDICT: FAIL
+
+==== Diagnostic: units at the recorded DraftKings opening price (home-side bets only; ESPN's feed records only the home price) ====
+  model B home-side bets with a price: 111, units at recorded price +10.7 vs at -110 +11.2, mean price -109.0
+
+==== Secondary (decide nothing) ====
+ ESPN BET 2025 (not in CT): games 4298
+  [ESPN BET 2025 (not in CT)] model A k 3: 29 bets, hit 0.621, units +5.4 (ROI +0.185), CLV +2.466 [90% +1.483, +3.500] | units by season {2025: 5.4} | CLV by season {2025: 2.47}
+  [ESPN BET 2025 (not in CT)] model B k 3: 59 bets, hit 0.559, units +4.0 (ROI +0.068), CLV +1.576 [90% +1.025, +2.178] | units by season {2025: 4.0} | CLV by season {2025: 1.58}
+   layer beat-the-opener slope +0.388 (t +1.45)
+ DK back-to-back games (timing unsafe): games 477
+  [DK back-to-back games (timing unsafe)] model A k 3: 3 bets, hit 0.333, units -1.1 (ROI -0.364), CLV +3.000 [90% +1.000, +5.000] | units by season {2024: -0.1, 2026: -1.0} | CLV by season {2024: 4.0, 2026: 1.0}
+  [DK back-to-back games (timing unsafe)] model B k 3: 34 bets, hit 0.588, units +4.2 (ROI +0.123), CLV +1.721 [90% +1.206, +2.235] | units by season {2024: 3.2, 2026: 1.0} | CLV by season {2024: 1.46, 2026: 1.9}
+   layer beat-the-opener slope +0.406 (t +0.92)
+ ESPN BET gaps in 2024/2026: games 305
+  [ESPN BET gaps in 2024/2026] model A k 3: 10 bets, hit 0.600, units +1.5 (ROI +0.145), CLV +3.000 [90% +1.450, +4.700] | units by season {2024: -0.1, 2026: 1.5} | CLV by season {2024: 4.0, 2026: 2.75}
+  [ESPN BET gaps in 2024/2026] model B k 3: 13 bets, hit 0.538, units +0.4 (ROI +0.028), CLV +3.231 [90% +1.962, +4.615] | units by season {2024: -1.2, 2026: 1.5} | CLV by season {2024: 4.4, 2026: 2.5}
+   layer beat-the-opener slope +2.386 (t +1.98)
+
+bets saved: 211
+
+==== Post-hoc diagnostic (NOT registered; decides nothing): CLV shape ====
+model A: CLV mean +1.850 median +1.50 share>0 0.78 share<0 0.12 | |opener|<=15: n 41 CLV +1.463 units +5.8
+model B: CLV mean +1.487 median +1.00 share>0 0.69 share<0 0.17 | |opener|<=15: n 116 CLV +1.159 units +7.2
