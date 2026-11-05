@@ -1,0 +1,61 @@
+sign check corr(M2_m, close-implied margin) = 0.926 | corr(M2_t, close total) = 0.873
+games after filters 63931
+season; 2008    2748; 2009    2714; 2010    2862; 2011    2907; 2012    2666; 2013     706; 2014    2806; 2015    2395; 2016    3219; 2017    3195; 2018    3264; 2019    4296; 2020    4058; 2021    2795; 2022    4461; 2023    4758; 2024    4660; 2025    4704; 2026    4717
+
+== A. basic shape of the excess (actual margin - close-implied margin) ==
+mean excess 0.036 sd 11.012 | share |excess|>40: 0.00101 | max 59.5
+neutral share 0.118
+       count   mean     std
+neu                        
+False  53390  0.026  11.009
+True    7169  0.111  11.038
+line_src counts: {'SBR': 37259, 'AN open / DK close': 14081, 'AN open / consensus close': 9219}
+
+== B. flipped-sign check: close sign vs our walk-forward margin sign, strong disagreements ==
+games with |close|>=7 and |M2|>=7 but opposite signs: 118 of 60559 | mean excess there 10.78 | mean |excess| 20.53
+{False: 110, True: 8} {2020: 87, 2021: 1, 2022: 18, 2023: 2, 2024: 3, 2025: 5, 2026: 2}
+
+== C. base-gap alone (blend - close) vs excess ==
+all: n=60559 slope of excess on base gap +0.270, corr +0.065, sd of gap 2.66
+non-neutral: n=53390 slope of excess on base gap +0.301, corr +0.072, sd of gap 2.62
+neutral: n=7169 slope of excess on base gap +0.175, corr +0.042, sd of gap 2.62
+
+== D. which features carry the layer (ridge fitted on all headline seasons, spreads, standardized coefficients) ==
+s_lost_min_share    0.161
+s_lost_pts_share   -0.456
+s_new_starters     -0.057
+s_travel_miles     -0.092
+s_tz_shift         -0.062
+s_rest_days        -0.155
+s_back_to_back     -0.232
+s_games_last_7     -0.020
+  corr(excess, s_lost_min_share) = -0.0267
+  corr(excess, s_lost_pts_share) = -0.0289
+  corr(excess, s_new_starters) = -0.0137
+  corr(excess, s_travel_miles) = -0.0070
+  corr(excess, s_tz_shift) = -0.0087
+  corr(excess, s_rest_days) = -0.0074
+  corr(excess, s_back_to_back) = -0.0132
+  corr(excess, s_games_last_7) = +0.0030
+neutral-site split of the layer slope (LOSO ALL spreads):
+[non-neutral] mk='s' n=53390 seasons=17 | layer slope +0.698 (t +5.89); full-model slope +0.924 (t +3.56); seasons with layer slope>0: 15/17 | MSE A-B +0.1981 (t +2.90) | RMSE close 11.009 A 10.991 B 10.982 | close bets |pred|>=1: n=9488 hit 0.543 units +349.9
+[neutral] mk='s' n=6862 seasons=17 | layer slope +0.781 (t +3.58); full-model slope +0.767 (t +4.25); seasons with layer slope>0: 14/17 | MSE A-B +0.4785 (t +2.21) | RMSE close 11.053 A 11.056 B 11.034 | close bets |pred|>=1: n=1925 hit 0.530 units +24.3
+
+== E. placebo: shuffle each season's feature rows across games (breaks any real link, keeps distributions) ==
+[PLACEBO 0] mk='s' n=60252 seasons=17 | layer slope +0.094 (t +0.28); full-model slope +0.809 (t +2.64); seasons with layer slope>0: 10/17 | MSE A-B -0.0176 (t -1.09) | RMSE close 11.017 A 11.002 B 11.003 | close bets |pred|>=1: n=7245 hit 0.535 units +149.9
+[PLACEBO 1] mk='s' n=60252 seasons=17 | layer slope +0.328 (t +1.30); full-model slope +0.820 (t +2.72); seasons with layer slope>0: 10/17 | MSE A-B -0.0070 (t -0.61) | RMSE close 11.009 A 10.994 B 10.995 | close bets |pred|>=1: n=7176 hit 0.538 units +191.3
+[PLACEBO 2] mk='s' n=60252 seasons=17 | layer slope +0.164 (t +0.71); full-model slope +0.823 (t +2.73); seasons with layer slope>0: 10/17 | MSE A-B -0.0099 (t -1.31) | RMSE close 11.018 A 11.003 B 11.003 | close bets |pred|>=1: n=7144 hit 0.538 units +187.1
+
+== G. by close source (LOSO ALL spreads): layer slope, base-gap slope, hit rate of the base gap alone at |gap|>=3 ==
+AN open / DK close n 14072 seasons [np.int64(2024), np.int64(2025), np.int64(2026)] .. layer slope 0.595 | full slope 0.591 | corr(gap part, excess) 0.0347
+AN open / consensus close n 9216 seasons [np.int64(2022), np.int64(2023)] .. layer slope 0.971 | full slope 1.116 | corr(gap part, excess) 0.0766
+SBR n 36964 seasons [np.int64(2008), np.int64(2009), np.int64(2010)] .. layer slope 0.699 | full slope 0.96 | corr(gap part, excess) 0.0579
+gap-only (model A) bets |pred|>=0.9: n 8824 hit 0.5349
+    AN open / DK close n 2514 hit 0.5298
+    AN open / consensus close n 1466 hit 0.5366
+    SBR n 4844 hit 0.5371
+
+== F. layer-only close bets by season (spreads, LOSO ALL, |layer part|>=0.3 pt) ==
+season     2008     2009     2010     2011     2014     2015      2016     2017     2018      2019      2020     2021      2022     2023      2024      2025      2026
+n       875.000  837.000  816.000  913.000  847.000  771.000  1022.000  907.000  987.000  1400.000  1357.000  1067.00  1821.000  1771.00  1831.000  1834.000  1827.000
+hit       0.485    0.507    0.515    0.513    0.516    0.513     0.541    0.516    0.534     0.549     0.507     0.53     0.506     0.53     0.506     0.511     0.512

@@ -1,0 +1,38 @@
+sign check corr(M2_m, close-implied margin) = 0.926 | corr(M2_t, close total) = 0.873
+games after filters 63931
+season; 2008    2748; 2009    2714; 2010    2862; 2011    2907; 2012    2666; 2013     706; 2014    2806; 2015    2395; 2016    3219; 2017    3195; 2018    3264; 2019    4296; 2020    4058; 2021    2795; 2022    4461; 2023    4758; 2024    4660; 2025    4704; 2026    4717
+
+==== PRIMARY: leave-one-season-out, 17 headline seasons ====
+[LOSO ALL] mk='s' n=60252 seasons=17 | layer slope +0.717 (t +8.64); full-model slope +0.884 (t +3.82); seasons with layer slope>0: 16/17 | MSE A-B +0.2301 (t +3.81) | RMSE close 11.014 A 10.999 B 10.988 | close bets |pred|>=1: n=11413 hit 0.541 units +374.1
+[LOSO LINEUP] mk='s' n=60559 seasons=17 | layer slope +0.736 (t +5.95); full-model slope +0.883 (t +3.53); seasons with layer slope>0: 15/17 | MSE A-B +0.1686 (t +3.27) | RMSE close 11.012 A 10.997 B 10.990 | close bets |pred|>=1: n=9913 hit 0.546 units +406.1
+[LOSO TRAVEL] mk='s' n=60252 seasons=17 | layer slope +0.695 (t +5.18); full-model slope +0.849 (t +3.01); seasons with layer slope>0: 16/17 | MSE A-B +0.0575 (t +2.42) | RMSE close 11.014 A 10.999 B 10.996 | close bets |pred|>=1: n=8344 hit 0.539 units +233.6
+[LOSO ALL] mk='t' n=60252 seasons=17 | layer slope +0.654 (t +4.42); full-model slope +0.799 (t +3.13); seasons with layer slope>0: 16/17 | MSE A-B +0.1488 (t +1.93) | RMSE close 16.932 A 16.909 B 16.905 | close bets |pred|>=1: n=23634 hit 0.515 units -399.3
+[LOSO LINEUP] mk='t' n=60559 seasons=17 | layer slope +0.671 (t +2.22); full-model slope +0.779 (t +2.70); seasons with layer slope>0: 14/17 | MSE A-B +0.0519 (t +0.94) | RMSE close 16.935 A 16.913 B 16.912 | close bets |pred|>=1: n=20511 hit 0.511 units -509.1
+[LOSO TRAVEL] mk='t' n=60252 seasons=17 | layer slope +0.629 (t +4.24); full-model slope +0.797 (t +2.67); seasons with layer slope>0: 14/17 | MSE A-B +0.0817 (t +1.67) | RMSE close 16.932 A 16.909 B 16.907 | close bets |pred|>=1: n=21661 hit 0.511 units -536.9
+
+==== PASS / FAIL (ALL set; P1 layer slope t>2, P2 >=12 of 17 seasons positive, P3 MSE improvement t>2) ====
+spreads: P1 True (t +8.64), P2 True (16/17), P3 True (t +3.81) -> PASS
+totals: P1 True (t +4.42), P2 True (16/17), P3 False (t +1.93) -> FAIL
+group-level (need t>2.5 on P1 and P3):
+  spreads LINEUP: P1 t +5.95 (True), P3 t +3.27 (True)
+  spreads TRAVEL: P1 t +5.18 (True), P3 t +2.42 (False)
+  totals LINEUP: P1 t +2.22 (False), P3 t +0.94 (False)
+  totals TRAVEL: P1 t +4.24 (True), P3 t +1.67 (False)
+
+per-season layer slopes (ALL):
+s {2008: np.float64(-0.29), 2009: np.float64(0.58), 2010: np.float64(0.07), 2011: np.float64(0.84), 2014: np.float64(0.25), 2015: np.float64(0.93), 2016: np.float64(0.73), 2017: np.float64(0.6), 2018: np.float64(1.11), 2019: np.float64(1.22), 2020: np.float64(0.76), 2021: np.float64(0.86), 2022: np.float64(0.69), 2023: np.float64(1.32), 2024: np.float64(0.64), 2025: np.float64(0.51), 2026: np.float64(0.63)}
+t {2008: np.float64(0.46), 2009: np.float64(1.63), 2010: np.float64(1.6), 2011: np.float64(1.04), 2014: np.float64(1.38), 2015: np.float64(1.48), 2016: np.float64(0.49), 2017: np.float64(0.95), 2018: np.float64(0.93), 2019: np.float64(0.88), 2020: np.float64(0.62), 2021: np.float64(0.1), 2022: np.float64(0.84), 2023: np.float64(-0.34), 2024: np.float64(0.7), 2025: np.float64(0.35), 2026: np.float64(1.23)}
+
+==== SECONDARY: forward (train on earlier seasons only), 2016-2026 ====
+[FORWARD ALL] mk='s' n=44100 seasons=11 | layer slope +0.825 (t +8.77); full-model slope +0.991 (t +3.95); seasons with layer slope>0: 11/11 | MSE A-B +0.2945 (t +5.11) | RMSE close 11.190 A 11.172 B 11.159 | close bets |pred|>=1: n=7258 hit 0.543 units +265.2
+[FORWARD ALL] mk='t' n=44100 seasons=11 | layer slope +0.430 (t +3.70); full-model slope +0.736 (t +2.54); seasons with layer slope>0: 10/11 | MSE A-B +0.0330 (t +0.27) | RMSE close 16.830 A 16.800 B 16.799 | close bets |pred|>=1: n=15899 hit 0.519 units -141.1
+
+==== WEAK SEASONS 2012, 2013 (fit on headline seasons; not pooled) ====
+[WEAK 2012] mk='s' n=2660 seasons=1 | layer slope +0.753 (t +nan); full-model slope +0.445 (t +nan); seasons with layer slope>0: 1/1 | MSE A-B +0.1469 (t +nan) | RMSE close 10.479 A 10.489 B 10.482 | close bets |pred|>=1: n=424 hit 0.496 units -21.7
+[WEAK 2013] mk='s' n=704 seasons=1 | layer slope +1.303 (t +nan); full-model slope +0.769 (t +nan); seasons with layer slope>0: 1/1 | MSE A-B +0.3546 (t +nan) | RMSE close 10.640 A 10.640 B 10.623 | close bets |pred|>=1: n=142 hit 0.536 units +3.2
+[WEAK 2012] mk='t' n=2660 seasons=1 | layer slope -1.017 (t +nan); full-model slope -0.184 (t +nan); seasons with layer slope>0: 0/1 | MSE A-B -0.6293 (t +nan) | RMSE close 16.647 A 16.662 B 16.681 | close bets |pred|>=1: n=1162 hit 0.489 units -76.1
+[WEAK 2013] mk='t' n=704 seasons=1 | layer slope +0.510 (t +nan); full-model slope +1.876 (t +nan); seasons with layer slope>0: 1/1 | MSE A-B -0.0663 (t +nan) | RMSE close 17.189 A 17.184 B 17.186 | close bets |pred|>=1: n=265 hit 0.487 units -18.6
+
+==== ORACLE (in-game box score; NOT tradable; diagnostic) LINEUP set with oracle absences ====
+[ORACLE] mk='s' n=60537 seasons=17 | layer slope +0.742 (t +7.70); full-model slope +0.898 (t +3.75); seasons with layer slope>0: 17/17 | MSE A-B +0.2764 (t +3.34) | RMSE close 11.011 A 10.997 B 10.984 | close bets |pred|>=1: n=11831 hit 0.539 units +345.1
+[ORACLE] mk='t' n=60537 seasons=17 | layer slope +0.881 (t +6.84); full-model slope +0.853 (t +4.44); seasons with layer slope>0: 17/17 | MSE A-B +0.2570 (t +3.78) | RMSE close 16.936 A 16.914 B 16.907 | close bets |pred|>=1: n=23408 hit 0.517 units -308.4
