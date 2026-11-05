@@ -1,0 +1,2 @@
+parameter,value,file,set_on,chosen_on,how_chosen,status,evidence,notes
+NCAAM_STALE_EDGE,0.5,ncaab/live_alert.py,2026-11-05,"SBR 2016-21 (threshold), DK 2023-26 (decision)",pre-registered (MODEL3_PREREG addendum),live (provisional),ncaab/research/MODEL3_RESULTS_2026-11-05.md,"623 bets 57.9% +65.5u CLV +1.27 at DK openers; stops -15u / 100-bet CLV < 0.63"
