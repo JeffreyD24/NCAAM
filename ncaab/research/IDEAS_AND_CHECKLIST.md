@@ -8,7 +8,15 @@ Opened Nov 5, 2026 (first entries from the lineup/injury/travel layer). Test on 
       11 of 2,483 base bets (+11 points, +3.8u). Fable review of a "wait" flag only if Jeffrey wants it (Claude: not worth it).
 - [x] **v3 matched B-vs-A comparison: DONE Nov 5, FAIL** (same file): at equal bet counts B's CLV = A's (D +0.01 at 2%). Layer dropped as a stand-alone bet signal.
 - [x] **Layer in the close model: DONE Nov 5, PASS spreads and totals** (`research/CLOSE_MODEL_LAYER_RESULTS_2026-11-05.md`); C3L is the research close model.
-- [ ] **[LEAD] Base model alone at DK's opener, |pred| >= ~2.8 (top 1%):** DK 2023-24 + 2025-26: 85 bets, 60.7%, +13.4u (2024 +14.4, 2026 -1.0), CLV +1.78;
+- [ ] **Base edge >= 2.8 at DK's opener: pre-registered (`research/BASE_EDGE_DK_CANDIDATE_PREREG_2026-11-05.md`), Fable APPROVE WITH CHANGES (adopted).**
+      Before the first alert: build live M8 and MKT ratings, check them against `three_targets_preds.csv` 2025-26, then start the PROVISIONAL record. Needs Jeffrey's go.
+- [ ] **[IDEA] Early-season roster prior (player level):** 62 of 84 top-edge bets are Nov-Dec, where team ratings are weakest. Build preseason team strength from
+      returning minutes and incoming transfers (player box scores 2008-27 already saved: athlete_id across seasons), add as a prior / feature to the base model,
+      pre-register, test leave-one-season-out on SBR seasons then DK openers. Playbook step 2 "transfers and returning minutes". Claude's pick for the next build.
+- [ ] **[IDEA] College sharp money** (playbook step 2, last bullet): `sharp/data/ncaab_splits.csv.gz` already has Action Network ticket % vs money % for about
+      5,000-5,600 games a season 2019-20 to 2025-26 (DK lines alongside 2024-26). Test: does money % minus ticket % predict DK's opener-to-close move and the result
+      beyond C3L and the base gap? Check first when the splits were captured (a near-close snapshot can't be used at the opener).
+- [ ] (history) **[LEAD] Base model alone at DK's opener, |pred| >= ~2.8 (top 1%):** DK 2023-24 + 2025-26: 85 bets, 60.7%, +13.4u (2024 +14.4, 2026 -1.0), CLV +1.78;
       ESPN BET 2024-25 top 2%: 86 bets +13.3u, CLV +1.74; SBR 2008-21 leave-one-season-out at k 3: 362 bets, +56.5u, CLV +0.47 (SBR openers, not bettable).
       Units alone are within luck (z 1.5, luck sd 8.7u); CLV is the strong part. Jeffrey asked (Nov 5, 18:52) why not use it. Next step if he wants it: pre-register
       it as a fixed rule (threshold in points, written now), Fable review, then a PROVISIONAL record of its own.

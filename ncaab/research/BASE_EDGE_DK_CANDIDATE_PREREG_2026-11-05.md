@@ -39,6 +39,22 @@ Luck alone on 85 bets: sd about 8.7u; hit rate 60.7% is z +1.53 vs 52.4%. Earlie
 - Expected volume: about 40-45 bets a season (85 in two seasons), so the 100-bet review is about 2 seasons away; CLV is the measure that can say something sooner.
 - The current season's record is a running check of this rule, not a re-test of it (RULE 2); this pre-registration is the test design.
 
+## AMENDMENT after the Fable review (Nov 5, 2026, before any tracking; original text above kept, git history c22d58d)
+Review: `fable_review_base_edge_2026-11-05/REVIEW.md`, verdict **APPROVE WITH CHANGES**. All eight changes adopted; they replace the conflicting text above:
+1. **Line used:** the gap is computed with DraftKings' line **at alert time** (S = current DK spread, normally the opener). Bet only if edge >= 2.8 at that line.
+   Log: DK opener, line taken, price, timestamp, gap, edge, M2_m, M8_m, MKT_m.
+2. **Back-to-backs are included** (the tests excluded them; including them on the DK seasons: 90 bets, CLV +1.81, +10.3u). Their bets are flagged in the record.
+3. **CLV** is graded against DraftKings' own close from ESPN's feed; any fallback close is flagged and reported separately.
+4. **Price guard:** only bet at -115 or better; a qualifying game at a worse price is recorded as a non-bet with its CLV.
+5. **Stop rules (replace the ones above):** at 50 bets stop if CLV's 90% upper end < 0.67; at 100 bets stop if CLV < 0.67; stop any time units <= -15.
+   Keep rule unchanged: 200+ bets, CLV >= 0.67 (90% low > 0.3) and units > 0 before any stake increase.
+6. **Unit:** 1 unit = Jeffrey's flat NCAAM stake, at most DraftKings' NCAAM opener limit. Account risk noted: opener bets on large mismatches look like sharp play
+   and may get the account limited; that cost is part of judging the rule.
+7. **Expectation written in advance:** a 2.8-pt edge has been worth about 1.1 pts of result (beat-the-opener slope 0.40), about **+3-4% ROI**; over 100 bets that
+   is about +3u with luck of about +/-10u. A flat first 100 bets is the expected outcome, not a failure; CLV decides.
+8. **Each 50-bet review** also reports CLV split by home/away side, Nov-Dec vs Jan-Mar, and |opener| > 10 vs <= 10.
+Threshold note: the review found k 3.0 (fixed before grading) the cleanest; 2.8 stays as Jeffrey chose, and the record also reports how the 3.0+ subset does.
+
 ## What has to exist before the first alert (implementation, after review)
 The live NCAAM jobs (`nba-mixed-model/ncaab/`) produce Model 1 and M2 daily; **M8 and MKT live ratings do not exist yet.** They must be built from the same code
 (`model2_tournament.py` walk with the M8 settings; MKT on past closes) and checked against `three_targets_preds.csv` on 2025-26 (same numbers to 0.01) before
