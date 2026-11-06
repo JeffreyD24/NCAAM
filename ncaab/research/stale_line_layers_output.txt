@@ -1,0 +1,28 @@
+S0 (live BLEND-C):
+  coefficients used for 2025-26 (5 terms): [-0.075, 0.004, 0.028, 0.098, 0.88]
+S1 (BLEND-C + layers):
+  coefficients used for 2025-26 (17 terms): [-0.099, 0.01, 0.031, 0.098, 0.867, 0.86, -2.185, 0.001, -0.005, -0.071, 0.008, -0.714, -0.001, -0.945, 1.273, 0.011, 0.045]
+
+[DK 2023-24 + 2025-26 (DECIDES)] games 9156 {2024: 4661, 2026: 4495} | RMSE of predicted close: opener 1.5468, S0 1.4805, S1 1.4612
+  S0 live rule |e|>=0.5           642 bets 57.8%   +65.5u {2024: 34.4, 2026: 31.2} CLV +1.292
+  S1 matched count                642 bets 58.2%   +70.5u {2024: 33.5, 2026: 36.9} CLV +1.382
+  S1 own |e|>=0.5 (diagnostic)   1211 bets 55.9%   +79.4u {2024: 49.5, 2026: 29.8} CLV +1.137
+  overlap S0/S1 matched: 321 of 642
+
+[DK non-back-to-back games (P4)] games 8605 {2024: 4382, 2026: 4223} | RMSE of predicted close: opener 1.5467, S0 1.4802, S1 1.4641
+  S0 live rule |e|>=0.5           575 bets 57.2%   +52.4u {2024: 23.3, 2026: 29.1} CLV +1.330
+  S1 matched count                575 bets 57.1%   +51.5u {2024: 12.9, 2026: 38.6} CLV +1.427
+  S1 own |e|>=0.5 (diagnostic)   1028 bets 55.6%   +62.7u {2024: 36.2, 2026: 26.5} CLV +1.171
+  overlap S0/S1 matched: 317 of 575
+
+P1 D = CLV(S1) - CLV(S0) = +0.090 [90% -0.008, +0.216] -> False
+P2 units S1 +70.5 >= S0 +65.5 -> True
+P3 RMSE of close S1 < S0 -> True
+P4 D on non-back-to-backs +0.097 > 0 -> True
+VERDICT: FAIL
+
+[ESPN BET 2024-25 (decides nothing)] games 4950 {2025: 4950} | RMSE of predicted close: opener 1.5088, S0 1.4665, S1 1.4450
+  S0 live rule |e|>=0.5           339 bets 56.0%   +23.7u {2025: 23.7} CLV +0.883
+  S1 matched count                339 bets 56.0%   +23.7u {2025: 23.7} CLV +1.139
+  S1 own |e|>=0.5 (diagnostic)    737 bets 55.9%   +49.5u {2025: 49.5} CLV +0.860
+  overlap S0/S1 matched: 138 of 339

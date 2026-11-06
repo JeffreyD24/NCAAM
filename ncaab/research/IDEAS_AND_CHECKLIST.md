@@ -12,8 +12,9 @@ Opened Nov 5, 2026 (first entries from the lineup/injury/travel layer). Test on 
       rule; its 31 own bets -0.5u. Status note in `research/BASE_EDGE_DK_CANDIDATE_PREREG_2026-11-05.md`. Jeffrey decides.
 - [x] **Early-season roster layer: DONE Nov 5, FAIL** (`research/ROSTER_CONTINUITY_RESULTS_2026-11-05.md`): vs the close slope t +2.37, 12/16 seasons, but MSE gain
       t +1.80 (< 2). At DK's opener CLV +1.67 vs +1.31 (base) at matched counts; predicts DK's line move t +8.25.
-- [ ] **[LEAD] Add both layers (lineup/injury/travel + roster) to the stale-line rule's BLEND-C.** Both predict DK's opener-to-close move (t +7.85, +8.25); the live
-      stale-line rule bets that move. Pre-register: fit on SBR seasons, grade DK 2023-24 + 2025-26 vs the current stale-line rule at matched bet counts. Next build.
+- [x] **Both layers in the stale-line rule's BLEND-C: DONE Nov 5, FAIL by a hair** (`research/STALE_LINE_LAYERS_RESULTS_2026-11-05.md`): same 642 bets, CLV +1.38 vs
+      +1.29 (D +0.09, 90% [-0.008, +0.216]), +70.5u vs +65.5u, better close RMSE. Live rule unchanged.
+- [ ] **[IDEA] Paper shadow of stale-line + layers (S1) in 2026-27**, logged beside the live rule at no stake (a running check, not the test). Jeffrey's call.
 - [ ] **[LEAD] Stake more when the base edge and the stale-line rule agree** (54 overlap bets: 66.0%, +13.8u, CLV +2.26; candidate-only 31 bets -0.5u). Stake-sizing
       pre-registration; in-sample so far.
 - [ ] **[IDEA] College sharp money** (playbook step 2, last bullet): `sharp/data/ncaab_splits.csv.gz` already has Action Network ticket % vs money % for about
