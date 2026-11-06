@@ -38,26 +38,26 @@ else:
     p(f"\n## Markets listed for {sport}: {len(ms)}")
     for m in ms[:120]:
         p(f"- {m.get('id')}: {m.get('name') or m.get('title')} {m.get('category') or ''}")
-    p("\n## Player-prop offers by date (all markets, first 3 events)\n")
+    p("\n## v2 (Nov 5): player-prop markets 269/270 over ALL events of each date\n")
+    sample = {}
     for d in DATES:
         ev = get("events", dict(sport=sport, date=d)).get("events", [])
         if not ev: p(f"- {d}: 0 events"); continue
-        ids = ":".join(str(e["id"]) for e in ev[:3]); n = 0; mcnt = collections.Counter(); bcnt = collections.Counter(); opens = collections.Counter()
-        for page in range(1, 6):
-            o = get("offers", dict(sport=sport, event_id=ids, location="ALL", limit=50, page=page))
-            for of in o.get("offers", []):
-                n += 1; mcnt[of.get("market_id")] += 1
-                for sel in of.get("selections", []):
-                    op = sel.get("opening_line") or {}
-                    if op: opens[op.get("book_id")] += 1
-                    for b in sel.get("books", []): bcnt[b.get("id")] += 1
-            if page >= ((o.get("_pagination") or {}).get("total_pages") or 1): break
-        p(f"- {d}: {len(ev)} events; offers in first 3 events {n}; markets {dict(mcnt.most_common(12))}; books {dict(bcnt.most_common(12))}; opening-line books {dict(opens.most_common(6))}")
-    # also the NBA market ids directly
-    ev = get("events", dict(sport=sport, date="2025-02-08")).get("events", [])
-    if ev:
-        o = get("offers", dict(sport=sport, market_id="156:157:151:162", event_id=":".join(str(e["id"]) for e in ev[:3]), location="ALL", limit=50))
-        p(f"\nNBA market ids 156/157/151/162 on 2025-02-08: {len(o.get('offers', []))} offers; pagination {o.get('_pagination')}")
-        if o.get("offers"): p("sample offer: " + json.dumps(o["offers"][0])[:1500])
+        n = 0; mcnt = collections.Counter(); bcnt = collections.Counter(); opens = collections.Counter(); evp = set(); players = set()
+        for k in range(0, len(ev), 10):
+            ids = ":".join(str(e["id"]) for e in ev[k:k + 10]); page = 1
+            while True:
+                o = get("offers", dict(sport=sport, market_id="269:270", event_id=ids, location="ALL", limit=50, page=page))
+                for of in o.get("offers", []):
+                    n += 1; mcnt[of.get("market_id")] += 1; evp.add(of.get("event_id")); players.add(of.get("player_id"))
+                    sample.setdefault(of.get("market_id"), of)
+                    for sel in of.get("selections", []):
+                        op = sel.get("opening_line") or {}
+                        if op: opens[op.get("book_id")] += 1
+                        for b in sel.get("books", []): bcnt[b.get("id")] += 1
+                if page >= ((o.get("_pagination") or {}).get("total_pages") or 1): break
+                page += 1
+        p(f"- {d}: {len(ev)} events, {len(evp)} with props, {len(players)} players, {n} offers; markets {dict(mcnt)}; books {dict(bcnt.most_common(12))}; opening-line books {dict(opens.most_common(6))}")
+    for m, of in sample.items(): p(f"\nsample offer market {m}: " + json.dumps(of)[:2500])
 os.makedirs(os.path.join(W, "research", "probes"), exist_ok=True)
 open(os.path.join(W, "research", "probes", "bp_ncaab_probe.md"), "w").write("\n".join(OUT) + "\n")
