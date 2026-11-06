@@ -64,9 +64,10 @@ def main():
     # market numbers per game: DraftKings opener from ESPN (provider 100), else the archive opener in all_games.csv
     O = pd.read_csv(os.path.join(W, "ncaab", "data", "espn_openers.csv"))
     O = O[O.provider_id == 100].drop_duplicates("espn_id")[["espn_id", "open_spread", "open_total"]]
-    G = pd.read_csv(os.path.join(W, "ncaab", "data", "all_games.csv"), low_memory=False)[["espn_id", "open_sp", "open_tot", "close_tot"]].drop_duplicates("espn_id")
+    G = pd.read_csv(os.path.join(W, "ncaab", "data", "all_games.csv"), low_memory=False)[["espn_id", "open_sp", "open_tot", "close_sp", "close_tot"]].drop_duplicates("espn_id")
     G = G.merge(O, on="espn_id", how="left")
-    G["sp_home"] = G.open_spread.fillna(G.open_sp); G["tot"] = G.open_total.fillna(G.open_tot)
+    # Amendment 1 (Nov 6, 2026; PROPS_V1_PREREG): no openers exist in 2021-22 / 2022-23, so the archive close stands in where no opener exists
+    G["sp_home"] = G.open_spread.fillna(G.open_sp).fillna(G.close_sp); G["tot"] = G.open_total.fillna(G.open_tot).fillna(G.close_tot)
     B = B.merge(G[["espn_id", "sp_home", "tot"]], on="espn_id", how="left")
     B["open_sp_team"] = np.where(B.home == 1, B.sp_home, -B.sp_home)
     # pace = this game's opening total / the season's mean opening total over games before this date

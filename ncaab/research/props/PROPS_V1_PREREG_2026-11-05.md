@@ -68,3 +68,14 @@ A pass goes to a Fable review, then Jeffrey decides on a PROVISIONAL live record
 ## Reported, no pass/fail
 By stat, side, opening book, DK/FD slice, season, month (March/tournament separately: neutral sites, short rest), opener lead time,
 thresholds 3/8/12%, spread bucket (v1s vs v1 in blowouts), log loss of model / opener / close / blend, line movement opener → close in our direction.
+
+## Amendment 1 (Nov 6, 2026, ~01:30 ET) — written and pushed BEFORE any test-season outcome was looked at
+The first run stopped on a code bug before grading anything. What it printed (no outcomes): coverage, the box-only variance fit, and a
+blowout-minutes fit of exactly 0, because **2021-22 and 2022-23 have no opening game lines in our data** (`all_games.csv` open_sp/open_tot are
+empty for those two seasons; only closing lines exist). So in the FIT seasons pace was always 1 and v1s could not be fit.
+Change, applied to every season the same way: for the pace total and the blowout spread, use the opening number when it exists, else the
+**closing** number from the archive (`close_tot`, `close_sp`). In 2023-24 to 2025-26 the opener exists for ~90% of games, so the test seasons are
+essentially unchanged; in the FIT seasons the close stands in (approximate input, labeled; it carries a little hindsight into the fit of
+w and β only, never into a test-season bet). Code fixes in the same commit: `np.clip` instead of the pandas-style `.clip(lower=)` on arrays.
+The market-270 identification printed in that run: **270 = rebounds** (mean |line − model mean|: reb 0.69, ast 3.10, threes 3.73).
+Nothing else changes.

@@ -90,7 +90,7 @@ def pmodel(mu, stat):
     for s in ST:
         m = (stat == s).values
         if not m.any(): continue
-        a, b = var_ab[s]; u = mu[m].clip(lower=0.05); ex = (a - 1) * u + b * u ** 2
+        a, b = var_ab[s]; u = np.clip(mu[m], 0.05, None); ex = (a - 1) * u + b * u ** 2
         r = np.where(ex > 1e-6, u ** 2 / np.clip(ex, 1e-6, None), 1e6)
         p[m] = 1 - stats.nbinom.cdf(np.floor(X.line.values[m]), r, r / (r + u)); sd[m] = np.sqrt(u + u ** 2 / r)
     return p, sd
