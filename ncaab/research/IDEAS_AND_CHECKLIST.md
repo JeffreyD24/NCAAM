@@ -8,11 +8,14 @@ Opened Nov 5, 2026 (first entries from the lineup/injury/travel layer). Test on 
       11 of 2,483 base bets (+11 points, +3.8u). Fable review of a "wait" flag only if Jeffrey wants it (Claude: not worth it).
 - [x] **v3 matched B-vs-A comparison: DONE Nov 5, FAIL** (same file): at equal bet counts B's CLV = A's (D +0.01 at 2%). Layer dropped as a stand-alone bet signal.
 - [x] **Layer in the close model: DONE Nov 5, PASS spreads and totals** (`research/CLOSE_MODEL_LAYER_RESULTS_2026-11-05.md`); C3L is the research close model.
-- [ ] **Base edge >= 2.8 at DK's opener: pre-registered (`research/BASE_EDGE_DK_CANDIDATE_PREREG_2026-11-05.md`), Fable APPROVE WITH CHANGES (adopted).**
-      Before the first alert: build live M8 and MKT ratings, check them against `three_targets_preds.csv` 2025-26, then start the PROVISIONAL record. Needs Jeffrey's go.
-- [ ] **[IDEA] Early-season roster prior (player level):** 62 of 84 top-edge bets are Nov-Dec, where team ratings are weakest. Build preseason team strength from
-      returning minutes and incoming transfers (player box scores 2008-27 already saved: athlete_id across seasons), add as a prior / feature to the base model,
-      pre-register, test leave-one-season-out on SBR seasons then DK openers. Playbook step 2 "transfers and returning minutes". Claude's pick for the next build.
+- [x] **Base edge >= 2.8 at DK's opener: pre-registered, Fable APPROVE WITH CHANGES, NOT started** (Nov 5, 19:45): 54 of its 85 bets duplicate the live stale-line
+      rule; its 31 own bets -0.5u. Status note in `research/BASE_EDGE_DK_CANDIDATE_PREREG_2026-11-05.md`. Jeffrey decides.
+- [x] **Early-season roster layer: DONE Nov 5, FAIL** (`research/ROSTER_CONTINUITY_RESULTS_2026-11-05.md`): vs the close slope t +2.37, 12/16 seasons, but MSE gain
+      t +1.80 (< 2). At DK's opener CLV +1.67 vs +1.31 (base) at matched counts; predicts DK's line move t +8.25.
+- [ ] **[LEAD] Add both layers (lineup/injury/travel + roster) to the stale-line rule's BLEND-C.** Both predict DK's opener-to-close move (t +7.85, +8.25); the live
+      stale-line rule bets that move. Pre-register: fit on SBR seasons, grade DK 2023-24 + 2025-26 vs the current stale-line rule at matched bet counts. Next build.
+- [ ] **[LEAD] Stake more when the base edge and the stale-line rule agree** (54 overlap bets: 66.0%, +13.8u, CLV +2.26; candidate-only 31 bets -0.5u). Stake-sizing
+      pre-registration; in-sample so far.
 - [ ] **[IDEA] College sharp money** (playbook step 2, last bullet): `sharp/data/ncaab_splits.csv.gz` already has Action Network ticket % vs money % for about
       5,000-5,600 games a season 2019-20 to 2025-26 (DK lines alongside 2024-26). Test: does money % minus ticket % predict DK's opener-to-close move and the result
       beyond C3L and the base gap? Check first when the splits were captured (a near-close snapshot can't be used at the opener).
