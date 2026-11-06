@@ -1,0 +1,41 @@
+name: Past NCAAM player props backfill (BettingPros, free)
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/props-bettingpros.yml", "ncaab/props/bettingpros.py"]
+  schedule:
+    - cron: "17 */6 * * *"     # keeps going until every date is saved, then also picks up each new day
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: props-bettingpros
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q pandas
+      - name: Download newest seasons first, saving after each batch
+        run: |
+          git config user.name "ncaam-bot"; git config user.email "actions@users.noreply.github.com"
+          git fetch -q origin main && git checkout -q -B main origin/main
+          START=$(date +%s)
+          while [ $(( $(date +%s) - START )) -lt 19800 ]; do
+            OUT=$(python ncaab/props/bettingpros.py . --newest-first --max-dates 15 2>&1) && RC=0 || RC=$?
+            echo "$OUT" | tail -3
+            git add ncaab/data/props_history/bettingpros
+            if ! git diff --cached --quiet; then
+              git commit -q -m "BettingPros NCAAM props: $(echo "$OUT" | grep -o '^[0-9-]*' | tail -1)"
+              for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin main && break; sleep 10; done
+            fi
+            if [ $RC -ne 0 ] || echo "$OUT" | grep -q "already saved"; then break; fi
+          done
