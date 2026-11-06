@@ -17,7 +17,7 @@ Opened Nov 5, 2026 (first entries from the lineup/injury/travel layer). Test on 
 - [x] **Stale-line v1 vs v2 on SBR 2014-2021 (never used for this comparison): DONE Nov 6, PASS** (`research/STALE_LINE_V2_SBR_RESULTS_2026-11-06.md`):
       v2 at 0.62: 1,520 bets +251.1u CLV +0.640 vs v1 1,596 bets +189.6u CLV +0.559; D +0.082 [90% +0.022, +0.141]; v2 CLV higher 6 of 8 seasons. SBR openers not bettable.
 - [ ] **[LEAD] v2 replaces v1 live?** Candidate after the SBR PASS. Next: Fable review of the swap + Jeffrey's go. Paper record keeps running either way.
-- [~] **Paper shadow of stale-line v2 (S1)**: Jeffrey Nov 6, 10:18: v1 live, v2 paper (`live_paper_v2.csv`, nba-mixed-model branch `ncaam-stale-line-v2`).
+- [x] **Paper shadow of stale-line v2: STARTED Nov 6** (Jeffrey 10:18: v1 live, v2 paper). nba-mixed-model main 00df3e37: picks in `ncaab/state/live_paper_v2.csv`, record `live_record_v2_paper.md`; Fable re-review APPROVE WITH FIXES (fixes applied).
 - [ ] **[LEAD] Stake more when the base edge and the stale-line rule agree** (54 overlap bets: 66.0%, +13.8u, CLV +2.26; candidate-only 31 bets -0.5u). Stake-sizing
       pre-registration; in-sample so far.
 - [ ] **[IDEA] College sharp money** (playbook step 2, last bullet): `sharp/data/ncaab_splits.csv.gz` already has Action Network ticket % vs money % for about
