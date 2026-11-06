@@ -1,0 +1,122 @@
+BettingPros NCAAM lines: 977269 rows, 716 dates, seasons {2022: 36444, 2023: 36540, 2024: 355768, 2025: 244998, 2026: 300907, 2027: 2612}
+features: 572495 player-games; ambiguous same-day names dropped: 2272
+var_ab (2021-22 + 2022-23 box; 2020-21 has no features since it is the prior season): pts a 4.67 b -0.0941, reb a 1.74 b -0.0160, ast a 1.43 b -0.0127, fg3m a 1.49 b -0.1135
+blowout minutes (v1s): beta0 -0.1004, beta1 +0.1239  (e.g. starter 30 min, 25-pt spread: x 1.7 -> x 1.040)
+market 270 identification (mean |line - model mean|): reb 0.69, ast 3.10, fg3m 3.73 -> 270 = reb
+openers: 88788; by book {'draftkings': 21890, 'betmgm': 20066, 'fanduel': 18061, 'caesars': 10685, 'underdog': 7165, 'thescore': 4631, '39': 3682, 'prizepicks': 1186, 'hardrock': 807, 'fanatics': 451, 'betrivers': 52, 'bet365': 40}
+openers matched to a played game: 86463 of 88788
+FIXES: dropped 21 rows whose ESPN game is not the event's game, 0 points lines > 40
+after timing guard (prev game on an earlier ET day; opener 1h+ before tip; 3+ games; line >= 0.5): 80607
+sportsbook openers (DFS apps / consensus / unknown excluded): 69972; by season {2022: 6399, 2023: 6284, 2024: 23733, 2025: 19494, 2026: 14062}; by book {'draftkings': 20026, 'betmgm': 18176, 'fanduel': 16180, 'caesars': 10204, 'thescore': 4286, 'hardrock': 678, 'fanatics': 352, 'bet365': 29, 'betrivers': 26, 'partycasino': 13, 'sugarhouse': 2}
+FIXES: lean used = walk-forward (prior seasons only): 2022 +nan, 2023 +3.04, 2024 +2.38, 2025 +2.14, 2026 +2.21
+close over-lean by season (no-vig over minus actual, matched rows): 2022 +3.04, 2023 +1.73, 2024 +1.65, 2025 +2.44, 2026 +5.41
+
+================ v1 ================
+FIT 2021-22 + 2022-23: w = 0.204 (log loss opener 0.6920, model 0.7251, blend 0.6900, n 12683)
+TEST log loss: opener 0.6900, model 0.7140, blend 0.6871 (n 57241); close 0.6875 vs blend 0.6865 on the 37589 rows with a close
+information test (model beyond the opener, test seasons, date-clustered): coef +0.212 se 0.019 90% CI [+0.182, +0.243] n 57241
+   2024: coef +0.210 se 0.032 n 23685
+   2025: coef +0.218 se 0.029 n 19494
+   2026: coef +0.180 se 0.037 n 14062
+Rule (EV >= 5% at the opening price, sportsbook openers) by season:
+  2022 fit:   312 bets | win  56.7% |   +28.5u ROI +9.1% [-1.0, +18.8] | close-EV raw -4.27% lean-adj +1.09% (n 217) | line move our way +0.07
+  2023 fit:   373 bets | win  56.0% |   +29.5u ROI +7.9% [+0.2, +15.3] | close-EV raw -2.25% lean-adj +3.39% (n 278) | line move our way +0.12
+  2024 TEST:   661 bets | win  56.1% |   +77.5u ROI +11.7% [+6.7, +16.5] | close-EV raw -3.77% lean-adj +0.58% (n 356) | line move our way +0.07
+  2025 TEST:   518 bets | win  57.3% |   +73.3u ROI +14.1% [+7.7, +20.6] | close-EV raw -1.86% lean-adj +2.26% (n 344) | line move our way +0.17
+  2026 TEST:   810 bets | win  58.9% |  +128.5u ROI +15.9% [+11.1, +20.7] | close-EV raw -5.51% lean-adj -1.36% (n 802) | line move our way -0.03
+TEST pooled:  1989 bets | win  57.5% |  +279.3u ROI +14.0% [+11.1, +17.2] | close-EV raw -4.26% lean-adj -0.07% (n 1502) | line move our way +0.04
+simple (a) no model (w=0): 0 bets
+simple (b) every under at these openers: 57289 bets, -588.0u ROI -1.03%
+seasons counted (100+ bets): [2024, 2025, 2026]
+checks: 1 information PASS | 2 unseen seasons PASS | 3 lean-adj close-EV >= 0 fail | 4 beats simple PASS -> does not qualify
+Descriptive (test seasons):
+  DK/FD openers only:   755 bets | win  56.1% |   +83.0u ROI +11.0% [+6.2, +15.6] | close-EV raw -2.27% lean-adj +1.99% (n 455) | line move our way +0.16
+     2024:   633 bets | win  55.1% |   +62.8u ROI +9.9% [+4.9, +14.8] | close-EV raw -3.94% lean-adj +0.38% (n 340) | line move our way +0.05
+     2025:    86 bets | win  61.6% |   +14.7u ROI +17.1% [+4.7, +31.0] | close-EV raw +6.24% lean-adj +10.22% (n 79) | line move our way +0.73
+     2026:    36 bets | win  61.1% |    +5.5u ROI +15.3% [-8.7, +40.0] | close-EV raw -5.14% lean-adj -0.91% (n 36) | line move our way +0.00
+  EV >= 3%:  4956 bets | win  55.2% |  +401.9u ROI +8.1% [+5.9, +10.3] | close-EV raw -4.64% lean-adj -0.57% (n 3671) | line move our way +0.04
+  EV >= 8%:   372 bets | win  62.5% |   +99.2u ROI +26.7% [+18.5, +35.0] | close-EV raw -3.69% lean-adj +0.69% (n 300) | line move our way +0.06
+  EV >= 12%:    18 bets | win  83.3% |   +14.9u ROI +82.6% [+50.4, +110.7] | close-EV raw -2.32% lean-adj +2.49% (n 17) | line move our way -0.12
+  stat=pts:  1176 bets | win  55.5% |   +92.2u ROI +7.8% [+3.9, +11.8] | close-EV raw -3.79% lean-adj +0.17% (n 895) | line move our way +0.08
+  stat=reb:   813 bets | win  60.5% |  +187.1u ROI +23.0% [+17.5, +28.3] | close-EV raw -4.95% lean-adj -0.43% (n 607) | line move our way -0.02
+  side=over:    53 bets | win  47.2% |    -4.7u ROI -8.8% [-32.4, +15.5] | close-EV raw -1.00% lean-adj -5.39% (n 41) | line move our way +0.39
+  side=under:  1936 bets | win  57.8% |  +284.0u ROI +14.7% [+11.6, +17.8] | close-EV raw -4.35% lean-adj +0.08% (n 1461) | line move our way +0.03
+  open_book=betmgm:   971 bets | win  57.4% |  +130.5u ROI +13.4% [+8.7, +18.1] | close-EV raw -5.16% lean-adj -1.00% (n 843) | line move our way -0.02
+  open_book=betrivers:     1 bets | win 100.0% |    +0.9u ROI +85.5% [+nan, +nan] | close-EV raw -7.26% lean-adj -2.85% (n 1) | line move our way +0.00
+  open_book=caesars:   134 bets | win  63.4% |   +32.2u ROI +24.0% [+9.7, +38.0] | close-EV raw -2.97% lean-adj +1.16% (n 85) | line move our way +0.15
+  open_book=draftkings:   565 bets | win  54.6% |   +53.9u ROI +9.5% [+4.6, +14.1] | close-EV raw -4.83% lean-adj -0.20% (n 276) | line move our way -0.01
+  open_book=fanduel:   190 bets | win  60.5% |   +29.1u ROI +15.3% [+4.8, +25.5] | close-EV raw +1.69% lean-adj +5.37% (n 179) | line move our way +0.43
+  open_book=hardrock:    59 bets | win  52.5% |    +2.2u ROI +3.7% [-20.5, +26.6] | close-EV raw -6.83% lean-adj -2.63% (n 57) | line move our way -0.09
+  open_book=partycasino:     1 bets | win 100.0% |    +0.9u ROI +90.9% [+nan, +nan] | close-EV raw +3.44% lean-adj +7.67% (n 1) | line move our way +1.00
+  open_book=thescore:    68 bets | win  67.6% |   +29.6u ROI +43.6% [+25.9, +61.4] | close-EV raw -6.25% lean-adj -1.99% (n 60) | line move our way -0.03
+  month 1:   348 bets | win  53.7% |   +23.1u ROI +6.6% [-1.1, +14.1] | close-EV raw -4.86% lean-adj -0.53% (n 274) | line move our way +0.05
+  month 2:   482 bets | win  57.3% |   +69.8u ROI +14.5% [+7.8, +21.4] | close-EV raw -4.20% lean-adj +0.07% (n 353) | line move our way +0.03
+  month 3:   443 bets | win  57.9% |   +66.2u ROI +14.9% [+9.6, +20.6] | close-EV raw -2.46% lean-adj +1.84% (n 338) | line move our way +0.11
+  month 4:     5 bets | win  60.0% |    +1.1u ROI +22.4% [+nan, +nan] | close-EV raw +2.28% lean-adj +6.66% (n 5) | line move our way +0.20
+  month 11:   373 bets | win  59.0% |   +57.7u ROI +15.5% [+8.4, +22.4] | close-EV raw -5.40% lean-adj -1.55% (n 303) | line move our way -0.01
+  month 12:   338 bets | win  59.8% |   +61.4u ROI +18.2% [+10.5, +25.6] | close-EV raw -4.93% lean-adj -0.74% (n 229) | line move our way +0.03
+  |spread| (-0.1, 5.0]:   792 bets | win  56.8% |   +99.6u ROI +12.6% [+7.3, +18.0] | close-EV raw -4.03% lean-adj +0.19% (n 585) | line move our way +0.03
+  |spread| (5.0, 10.0]:   638 bets | win  56.7% |   +83.5u ROI +13.1% [+6.5, +19.6] | close-EV raw -4.22% lean-adj -0.03% (n 476) | line move our way +0.07
+  |spread| (10.0, 20.0]:   406 bets | win  60.6% |   +81.0u ROI +20.0% [+11.9, +27.6] | close-EV raw -4.58% lean-adj -0.41% (n 318) | line move our way +0.02
+  |spread| (20.0, 60.0]:   113 bets | win  58.4% |   +13.6u ROI +12.1% [-5.5, +31.5] | close-EV raw -4.59% lean-adj -0.69% (n 93) | line move our way +0.08
+  opener (1, 4] h before tip:   167 bets | win  56.9% |   +23.0u ROI +13.8% [+0.0, +27.4] | close-EV raw -5.90% lean-adj -1.67% (n 165) | line move our way -0.02
+  opener (4, 12] h before tip:   973 bets | win  56.7% |  +117.2u ROI +12.0% [+7.5, +16.8] | close-EV raw -4.94% lean-adj -0.86% (n 805) | line move our way +0.02
+  opener (12, 24] h before tip:   657 bets | win  59.1% |  +114.3u ROI +17.4% [+11.9, +22.8] | close-EV raw -3.44% lean-adj +0.90% (n 402) | line move our way +0.05
+  opener (24, 72] h before tip:   157 bets | win  58.3% |   +24.1u ROI +15.3% [+2.8, +26.8] | close-EV raw -0.08% lean-adj +4.21% (n 101) | line move our way +0.27
+  lean-adjusted close-EV 90% CI: [-0.46, +0.34]
+
+================ v1s ================
+FIT 2021-22 + 2022-23: w = 0.201 (log loss opener 0.6920, model 0.7254, blend 0.6900, n 12683)
+TEST log loss: opener 0.6900, model 0.7144, blend 0.6872 (n 57241); close 0.6875 vs blend 0.6866 on the 37589 rows with a close
+information test (model beyond the opener, test seasons, date-clustered): coef +0.202 se 0.018 90% CI [+0.171, +0.232] n 57241
+   2024: coef +0.201 se 0.031 n 23685
+   2025: coef +0.209 se 0.029 n 19494
+   2026: coef +0.167 se 0.037 n 14062
+Rule (EV >= 5% at the opening price, sportsbook openers) by season:
+  2022 fit:   287 bets | win  57.8% |   +32.6u ROI +11.4% [+1.6, +21.4] | close-EV raw -4.20% lean-adj +1.12% (n 197) | line move our way +0.09
+  2023 fit:   340 bets | win  55.3% |   +22.2u ROI +6.5% [-1.6, +14.2] | close-EV raw -2.18% lean-adj +3.45% (n 250) | line move our way +0.12
+  2024 TEST:   598 bets | win  55.8% |   +66.8u ROI +11.2% [+5.9, +16.2] | close-EV raw -3.64% lean-adj +0.61% (n 322) | line move our way +0.07
+  2025 TEST:   471 bets | win  57.3% |   +65.9u ROI +14.0% [+6.5, +21.1] | close-EV raw -1.70% lean-adj +2.36% (n 311) | line move our way +0.18
+  2026 TEST:   744 bets | win  59.5% |  +127.2u ROI +17.1% [+11.5, +22.6] | close-EV raw -5.55% lean-adj -1.44% (n 736) | line move our way -0.03
+TEST pooled:  1813 bets | win  57.7% |  +259.9u ROI +14.3% [+11.0, +17.6] | close-EV raw -4.23% lean-adj -0.10% (n 1369) | line move our way +0.04
+simple (a) no model (w=0): 0 bets
+simple (b) every under at these openers: 57289 bets, -588.0u ROI -1.03%
+seasons counted (100+ bets): [2024, 2025, 2026]
+checks: 1 information PASS | 2 unseen seasons PASS | 3 lean-adj close-EV >= 0 fail | 4 beats simple PASS -> does not qualify
+Descriptive (test seasons):
+  DK/FD openers only:   682 bets | win  56.1% |   +74.8u ROI +11.0% [+6.1, +15.8] | close-EV raw -2.10% lean-adj +2.08% (n 410) | line move our way +0.16
+     2024:   571 bets | win  54.7% |   +53.0u ROI +9.3% [+3.7, +14.6] | close-EV raw -3.82% lean-adj +0.40% (n 306) | line move our way +0.04
+     2025:    79 bets | win  63.3% |   +16.1u ROI +20.4% [+8.0, +34.1] | close-EV raw +6.50% lean-adj +10.48% (n 72) | line move our way +0.74
+     2026:    32 bets | win  62.5% |    +5.7u ROI +17.9% [-8.6, +42.3] | close-EV raw -4.92% lean-adj -0.70% (n 32) | line move our way +0.03
+  EV >= 3%:  4664 bets | win  55.5% |  +404.3u ROI +8.7% [+6.3, +11.1] | close-EV raw -4.68% lean-adj -0.66% (n 3475) | line move our way +0.03
+  EV >= 8%:   321 bets | win  61.6% |   +80.8u ROI +25.2% [+16.3, +34.2] | close-EV raw -3.65% lean-adj +0.69% (n 256) | line move our way +0.06
+  EV >= 12%:    15 bets | win  86.7% |   +13.7u ROI +91.1% [+58.0, +122.1] | close-EV raw -2.02% lean-adj +2.83% (n 14) | line move our way -0.07
+  stat=pts:  1069 bets | win  55.7% |   +86.3u ROI +8.1% [+3.8, +12.4] | close-EV raw -3.78% lean-adj +0.10% (n 812) | line move our way +0.08
+  stat=reb:   744 bets | win  60.7% |  +173.5u ROI +23.3% [+17.6, +28.9] | close-EV raw -4.87% lean-adj -0.38% (n 557) | line move our way -0.02
+  side=over:    59 bets | win  44.1% |    -9.0u ROI -15.2% [-37.2, +5.8] | close-EV raw -1.57% lean-adj -5.96% (n 47) | line move our way +0.32
+  side=under:  1754 bets | win  58.2% |  +268.8u ROI +15.3% [+12.1, +18.7] | close-EV raw -4.32% lean-adj +0.11% (n 1322) | line move our way +0.03
+  open_book=betmgm:   896 bets | win  57.5% |  +123.0u ROI +13.7% [+8.3, +19.1] | close-EV raw -5.13% lean-adj -1.01% (n 777) | line move our way -0.02
+  open_book=betrivers:     1 bets | win 100.0% |    +0.9u ROI +85.5% [+nan, +nan] | close-EV raw -7.26% lean-adj -2.85% (n 1) | line move our way +0.00
+  open_book=caesars:   116 bets | win  65.5% |   +31.7u ROI +27.3% [+12.3, +41.6] | close-EV raw -3.18% lean-adj +0.92% (n 73) | line move our way +0.16
+  open_book=draftkings:   508 bets | win  54.2% |   +44.8u ROI +8.8% [+3.3, +13.7] | close-EV raw -4.73% lean-adj -0.19% (n 247) | line move our way -0.01
+  open_book=fanduel:   174 bets | win  61.5% |   +30.1u ROI +17.3% [+5.9, +27.8] | close-EV raw +1.90% lean-adj +5.52% (n 163) | line move our way +0.43
+  open_book=hardrock:    57 bets | win  54.4% |    +4.0u ROI +7.0% [-17.2, +30.0] | close-EV raw -6.88% lean-adj -2.83% (n 55) | line move our way -0.09
+  open_book=partycasino:     1 bets | win 100.0% |    +0.9u ROI +90.9% [+nan, +nan] | close-EV raw +3.44% lean-adj +7.67% (n 1) | line move our way +1.00
+  open_book=thescore:    60 bets | win  66.7% |   +24.5u ROI +40.9% [+21.2, +60.5] | close-EV raw -6.21% lean-adj -2.20% (n 52) | line move our way -0.04
+  month 1:   316 bets | win  52.8% |   +15.3u ROI +4.8% [-3.4, +13.3] | close-EV raw -4.70% lean-adj -0.53% (n 253) | line move our way +0.06
+  month 2:   426 bets | win  57.7% |   +65.3u ROI +15.3% [+7.5, +22.7] | close-EV raw -4.06% lean-adj +0.18% (n 304) | line move our way +0.01
+  month 3:   396 bets | win  58.0% |   +59.5u ROI +15.0% [+8.8, +21.3] | close-EV raw -2.49% lean-adj +1.79% (n 302) | line move our way +0.11
+  month 4:     5 bets | win  60.0% |    +1.1u ROI +22.4% [+nan, +nan] | close-EV raw +2.28% lean-adj +6.66% (n 5) | line move our way +0.20
+  month 11:   356 bets | win  59.3% |   +57.7u ROI +16.2% [+9.0, +23.9] | close-EV raw -5.38% lean-adj -1.54% (n 291) | line move our way -0.01
+  month 12:   314 bets | win  60.5% |   +61.0u ROI +19.4% [+12.0, +27.2] | close-EV raw -4.94% lean-adj -0.84% (n 214) | line move our way +0.02
+  |spread| (-0.1, 5.0]:   719 bets | win  58.2% |  +109.9u ROI +15.3% [+9.8, +20.7] | close-EV raw -3.97% lean-adj +0.27% (n 532) | line move our way +0.03
+  |spread| (5.0, 10.0]:   572 bets | win  55.1% |   +56.1u ROI +9.8% [+2.6, +16.8] | close-EV raw -4.16% lean-adj +0.04% (n 425) | line move our way +0.08
+  |spread| (10.0, 20.0]:   371 bets | win  60.9% |   +77.3u ROI +20.8% [+12.4, +29.0] | close-EV raw -4.63% lean-adj -0.69% (n 288) | line move our way +0.02
+  |spread| (20.0, 60.0]:   116 bets | win  57.8% |   +12.0u ROI +10.3% [-7.2, +28.6] | close-EV raw -4.60% lean-adj -0.91% (n 97) | line move our way +0.07
+  opener (1, 4] h before tip:   156 bets | win  59.6% |   +29.5u ROI +18.9% [+4.3, +32.6] | close-EV raw -5.82% lean-adj -1.76% (n 154) | line move our way -0.02
+  opener (4, 12] h before tip:   895 bets | win  56.5% |  +105.4u ROI +11.8% [+6.7, +16.9] | close-EV raw -4.92% lean-adj -0.86% (n 745) | line move our way +0.02
+  opener (12, 24] h before tip:   591 bets | win  58.9% |   +99.2u ROI +16.8% [+10.8, +22.9] | close-EV raw -3.39% lean-adj +0.90% (n 354) | line move our way +0.05
+  opener (24, 72] h before tip:   141 bets | win  60.0% |   +25.7u ROI +18.2% [+3.9, +31.5] | close-EV raw +0.20% lean-adj +4.38% (n 91) | line move our way +0.30
+  lean-adjusted close-EV 90% CI: [-0.50, +0.36]
+
+Summary: v1: does not qualify (lean-adj close-EV -0.07%, +279.3u); v1s: does not qualify (lean-adj close-EV -0.10%, +259.9u)

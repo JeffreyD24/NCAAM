@@ -5,6 +5,10 @@ import os, sys, re, glob, unicodedata
 import numpy as np, pandas as pd
 from scipy import stats, optimize
 W = os.path.abspath(sys.argv[1]); HERE = os.path.join(W, "ncaab", "props")
+# --fixes (Nov 6, 2026, after the Fable review; NOT pre-registered, a labeled correction run): read only the committed derived/ features (RULE 4
+# reproducibility), drop matches whose ESPN game is not the BettingPros event's game (modal ESPN game among that event's matched players),
+# drop points lines > 40 (team totals mislabeled as players), and report the closing lean walk-forward (prior seasons only) next to LOSO.
+FIX = "--fixes" in sys.argv; SUF = "_fixes" if FIX else ""
 out = []
 def say(*a): out.append(" ".join(str(x) for x in a)); print(*a, flush=True)
 rng = np.random.default_rng(1105)
@@ -30,7 +34,7 @@ D["name_n"] = D.player.map(norm); d = pd.to_datetime(D.date); D["season"] = d.dt
 D["tip"] = pd.to_datetime(D.scheduled); D["upd"] = pd.to_datetime(D.updated); D["hours_before"] = (D.tip - D.upd).dt.total_seconds() / 3600
 say(f"BettingPros NCAAM lines: {len(D)} rows, {D.date.nunique()} dates, seasons {D.season.value_counts().sort_index().to_dict()}")
 ff = os.path.join(W, "_tmp", "ncaam_props_features.csv.gz")
-F = pd.read_csv(ff if os.path.exists(ff) else os.path.join(W, "derived", "ncaam_props_features.csv.gz"), dtype={"athlete_id": str})
+F = pd.read_csv(ff if (os.path.exists(ff) and not FIX) else os.path.join(W, "derived", "ncaam_props_features.csv.gz"), dtype={"athlete_id": str})
 F = F.sort_values(["athlete_id", "date"]); F["prev_date"] = F.groupby("athlete_id").date.shift()
 dup = F.groupby(["date", "name_n"]).athlete_id.transform("nunique") > 1
 say(f"features: {len(F)} player-games; ambiguous same-day names dropped: {dup.sum()}"); F = F[~dup]
@@ -75,10 +79,14 @@ C = C[C.line_over == C.line_under].rename(columns={"line_over": "c_line", "book"
 for c in ("price_over", "price_under"): C = C[(C[c].abs() >= 100) & (C[c].abs() <= 1000)]
 qo, qu = 1 / dec(C.price_over), 1 / dec(C.price_under); C["c_fair"] = qo / (qo + qu)
 
-FL = pd.concat([F[["date", "name_n", "season", "n_prev", "min_proj", "min_fac_s", "prev_date", "open_sp_team", s, f"mu_{s}"]]
+FL = pd.concat([F[["date", "name_n", "espn_id", "season", "n_prev", "min_proj", "min_fac_s", "prev_date", "open_sp_team", s, f"mu_{s}"]]
                 .rename(columns={s: "actual", f"mu_{s}": "mu"}).assign(stat=s) for s in ST], ignore_index=True)
 X = O.drop(columns="season").merge(FL, on=["date", "name_n", "stat"], how="inner")
 say(f"openers matched to a played game: {len(X)} of {len(O)}")
+if FIX:
+    mode = X.groupby("event_id").espn_id.agg(lambda v: v.mode().iloc[0])
+    bad = X.espn_id != X.event_id.map(mode); big = (X.stat == "pts") & (X.line > 40)
+    say(f"FIXES: dropped {bad.sum()} rows whose ESPN game is not the event's game, {(big & ~bad).sum()} points lines > 40"); X = X[~bad & ~big].copy()
 X = X[(X.n_prev >= 3) & (X.lead_h >= 1) & (X.prev_date.isna() | (X.prev_date < X.open_date_et)) & (X.line >= 0.5)].copy()
 say(f"after timing guard (prev game on an earlier ET day; opener 1h+ before tip; 3+ games; line >= 0.5): {len(X)}")
 X = X[X.open_book.isin(SPORTSBOOKS)].copy()
@@ -105,6 +113,10 @@ X["c_over_here"] = np.where(X.c_line == X.line, X.c_fair, 1 - stats.norm.cdf((X.
 Cl = X[X.c_fair.notna() & (X.actual != X.c_line)]
 lean = (Cl.groupby("season").c_fair.mean() - (Cl.actual > Cl.c_line).groupby(Cl.season).mean()).to_dict()
 loso = {s: np.mean([v for k, v in lean.items() if k != s]) for s in lean}
+if FIX:
+    wf = {s: np.mean([v for k, v in lean.items() if k < s]) if any(k < s for k in lean) else np.nan for s in lean}
+    say("FIXES: lean used = walk-forward (prior seasons only): " + ", ".join(f"{k} {v*100:+.2f}" for k, v in sorted(wf.items())))
+    loso = {k: v for k, v in wf.items() if not np.isnan(v)}
 say("close over-lean by season (no-vig over minus actual, matched rows): " + ", ".join(f"{k} {v*100:+.2f}" for k, v in sorted(lean.items())))
 
 
@@ -203,6 +215,6 @@ for name, pcol in (("v1", "p_v1"), ("v1s", "p_v1s")):
     for k, g in T.groupby("lead", observed=True): say(f"  opener {k} h before tip: {line_(g)}")
     if len(T[T.clev_adj.notna()]) > 5:
         lo2, hi2 = boot(T[T.clev_adj.notna()], "clev_adj"); say(f"  lean-adjusted close-EV 90% CI: [{lo2*100:+.2f}, {hi2*100:+.2f}]")
-    pd.concat([Bm.assign(rule=name), B0.assign(rule=f"{name}_no_model")]).to_csv(os.path.join(HERE, f"backtest_{name}_bets.csv.gz"), index=False)
+    pd.concat([Bm.assign(rule=name), B0.assign(rule=f"{name}_no_model")]).to_csv(os.path.join(HERE, f"backtest_{name}{SUF}_bets.csv.gz"), index=False)
 say("\nSummary: " + "; ".join(f"{k}: {'ALL PASS' if v['all_pass'] else 'does not qualify'} (lean-adj close-EV {v['clev']*100:+.2f}%, {v['units']:+.1f}u)" for k, v in res.items()))
-open(os.path.join(HERE, "backtest_v1_output.txt"), "w").write("\n".join(out) + "\n")
+open(os.path.join(HERE, f"backtest_v1{SUF}_output.txt"), "w").write("\n".join(out) + "\n")
