@@ -55,6 +55,17 @@ Review: `fable_review_base_edge_2026-11-05/REVIEW.md`, verdict **APPROVE WITH CH
 8. **Each 50-bet review** also reports CLV split by home/away side, Nov-Dec vs Jan-Mar, and |opener| > 10 vs <= 10.
 Threshold note: the review found k 3.0 (fixed before grading) the cleanest; 2.8 stays as Jeffrey chose, and the record also reports how the 3.0+ subset does.
 
+## STATUS Nov 5, 2026 (19:45): NOT started. It overlaps the live stale-line rule (Claude's recommendation; Jeffrey decides)
+Before wiring alerts, Claude found that the live PROVISIONAL **stale-line spreads rule** (nba-mixed-model `ncaab/research/MODEL3_RESULTS_2026-11-05.md`,
+`ncaab/live_alert.py`; DK 2023-26 backtest 623 bets 57.9% +65.5u CLV +1.27) already bets DraftKings' opener from the same three ratings (M2, M8, lagged market model).
+Check `ncaab/base_edge_vs_stale_overlap.py` -> `research/base_edge_vs_stale_overlap_output.txt` (DK 2023-24 + 2025-26, candidate top 1%):
+- **54 of 85 candidate bets are also stale-line bets on the same side:** 66.0%, +13.8u, CLV +2.26.
+- **The 31 candidate-only bets:** 51.6%, -0.5u, CLV +0.94 (2024 +5.1u, 2026 -5.5u).
+So the candidate adds almost nothing on its own; live, it would mostly double the stake on stale-line bets. Not started as a separate record.
+[LEAD] "Stake more when the base edge and the stale-line rule agree" (the 54 overlap bets) is a stake-sizing idea that needs its own pre-registration.
+Correction: the section below says live M8 and market ratings do not exist; they do (`nba-mixed-model/ncaab/live_ratings.py`: M2, M8 and a one-day-lagged market
+model, MKTL, for the stale-line rule). The candidate was tested with the unlagged MKT; a live version would use MKTL.
+
 ## What has to exist before the first alert (implementation, after review)
 The live NCAAM jobs (`nba-mixed-model/ncaab/`) produce Model 1 and M2 daily; **M8 and MKT live ratings do not exist yet.** They must be built from the same code
 (`model2_tournament.py` walk with the M8 settings; MKT on past closes) and checked against `three_targets_preds.csv` on 2025-26 (same numbers to 0.01) before

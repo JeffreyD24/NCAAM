@@ -1,0 +1,3 @@
+candidate top 1% (~edge 2.8) | also a stale-line bet (same side): 54 bets, hit 0.660, units +13.8, CLV +2.26, by season {2024: 9.3, 2026: 4.5}
+candidate top 1% (~edge 2.8) | candidate only: 31 bets, hit 0.516, units -0.5, CLV +0.94, by season {2024: 5.1, 2026: -5.5}
+stale-line candidate rows |edge| >= 0.5 before other filters: 1088
