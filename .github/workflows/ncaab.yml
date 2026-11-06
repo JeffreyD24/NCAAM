@@ -1,0 +1,43 @@
+name: NCAAM daily (test-only)
+# Copied from nba-mixed-model Nov 6, 2026 (NCAAM live move, Phase 0). Runs in parallel with the nba copy during the shadow run;
+# the nba copy is disabled at cutover (Phase 2).
+
+on:
+  schedule:
+    - cron: "17 14 * * *"      # 9:17 AM EST / 10:17 AM EDT: last night's NCAA men's games, model refit, test record
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: state-writes
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install tools
+        run: pip install -q -r requirements.txt scipy
+      - name: NCAAM daily (scores, lines, model, test record)
+        run: python ncaab/daily.py .
+      - name: NCAAM M2 totals TEST record (Nov 5, 2026; Fable-blocked for live, tracked at DraftKings' own opener)
+        run: python ncaab/m2_daily.py . || echo "M2 test record not updated; it will run again tomorrow."
+      - name: NCAAM live ratings for the PROVISIONAL stale-line spreads (Nov 5, 2026)
+        run: python ncaab/live_ratings.py . || echo "live ratings not updated; alerts use yesterday's file"
+      - name: Grade NCAAM PROVISIONAL alerts
+        run: python ncaab/live_grade.py . || echo "live grading failed; it will run again tomorrow"
+      - name: Save results
+        run: |
+          git config user.name "ncaam-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add ncaab/data ncaab/state
+          git diff --cached --quiet || git commit -m "NCAAM daily $(TZ=America/New_York date +%F)"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
