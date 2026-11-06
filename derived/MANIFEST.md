@@ -6,3 +6,4 @@
 
 Not saved here (already tracked elsewhere in this repo): walk-forward predictions `ncaab/data/three_targets_preds.csv` (M1/M2/M8/MKT), `model2_preds.csv`, `model3_preds.csv`.
 `derived.py` (the restore/save helper in nhl-mixed-model) has not been copied into this repo yet; files here are plain tracked gzips.
+| `roster_features.csv.gz` | One row per game (111,435): early-season roster features for home (`h_*`) and away (`a_*`): games before this one (n), returning share of last season's points (ret), incoming transfers' points share (inc), last-season strength (str, strin), R1-R4 (early-weighted, games 1-14). Definitions: `ncaab/research/ROSTER_CONTINUITY_PREREG_2026-11-05.md`. | `ncaab/roster_features.py` (about 75 s) | `ncaab/data/all_games.csv`, `ncaab/data/box/players_*.csv.gz` | see git log for this file |
