@@ -1,4 +1,4 @@
-# NCAAM player props v1 — pre-registration (written Nov 5, 2026, ~21:00 ET, BEFORE any prop line was downloaded or graded)
+# NCAAM player props v1 — pre-registration (written Nov 5, 2026, ~21:00 ET, BEFORE any prop line was looked at or graded; the backfill workflow had started on GitHub, nothing from it was opened)
 
 Built the same way as the NBA props (nba-mixed-model `research/props/PROPS_V1_PREREG`, `PROPS_V1B_OPENER_CLEAN_PREREG`), with the lessons
 from the NBA results applied up front. Only line *coverage* has been looked at (`research/probes/bp_ncaab_probe.md`), no outcome or edge.
