@@ -1,0 +1,18 @@
+A) fixed live threshold 0.62 vs matched cuts, DK 2024+2026
+  S0 |e0|>=0.5                                   642 bets 57.8%   +65.5u {2024: 34.4, 2026: 31.2} CLV +1.292
+  S1 fixed |e1|>=0.62 (LIVE rule)                625 bets 57.4%   +58.8u {2024: 33.9, 2026: 24.9} CLV +1.422
+  S1 season 2024 matched cut 0.633               256 bets 59.7%   +34.5u {2024: 34.5} CLV +1.436
+  S1 season 2026 matched cut 0.607               385 bets 57.4%   +36.9u {2026: 36.9} CLV +1.345
+B) back-to-back split (either team rest_days<=1): where live lineup features would be one game staler than the backtest
+  S1 0.62, b2b games                             133 bets 59.5%   +17.9u {2024: 16.2, 2026: 1.7} CLV +1.147
+  S1 0.62, non-b2b                               492 bets 56.8%   +40.9u {2024: 17.7, 2026: 23.2} CLV +1.497
+  S0 0.5, b2b games                               67 bets 62.7%   +13.2u {2024: 11.1, 2026: 2.1} CLV +0.963
+  S0 0.5, non-b2b                                575 bets 57.2%   +52.4u {2024: 23.3, 2026: 29.1} CLV +1.330
+C) S1 coefficients applied with b2b teams' lineup features treated as unknown (live situation)
+  S1-stale 0.62 all                              626 bets 57.1%   +55.9u {2024: 32.1, 2026: 23.8} CLV +1.420
+  S1-stale 0.62 b2b                              134 bets 58.3%   +15.0u {2024: 14.4, 2026: 0.6} CLV +1.138
+   S1 vs S1-stale bet-set overlap: 621 of 625
+D) share of S1 bets whose layer diffs are all zero (no features) and early-season share
+   S1 0.62 bets with all-zero layer diffs: 5 of 625
+   S1 0.62 bets by month: {1: 108, 2: 77, 3: 142, 4: 6, 11: 122, 12: 170}
+E) distribution of |e1-e0| on DK rows: [0.078 0.316 0.708]
