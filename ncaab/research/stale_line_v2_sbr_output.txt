@@ -1,0 +1,58 @@
+v1 (S0, live BLEND-C):
+  season 2014: trained on 13861 rows; coefficients (5 terms): [-0.029, 0.078, -0.011, 0.077, 0.856]
+  season 2021: trained on 35823 rows; coefficients (5 terms): [-0.072, 0.012, 0.013, 0.082, 0.899]
+v2 (S1, BLEND-C + layers):
+  season 2014: trained on 13861 rows; coefficients (17 terms): [-0.068, 0.079, 0.002, 0.078, 0.84, 1.009, -1.598, -0.005, -0.006, -0.13, 0.007, -0.469, -0.005, -1.695, 3.242, -0.035, -0.099]
+  season 2021: trained on 35823 rows; coefficients (17 terms): [-0.102, 0.014, 0.018, 0.082, 0.889, 1.174, -2.016, 0.003, -0.006, -0.087, 0.006, -0.733, 0.001, -0.872, 1.419, 0.004, 0.179]
+
+Test rows 2014-2021: 25010 games {2014: 1293, 2015: 1465, 2016: 3433, 2017: 3405, 2018: 3464, 2019: 4563, 2020: 4339, 2021: 3048}
+RMSE of predicted SBR close: opener 1.2955, v1 1.2714, v2 1.2643
+
+[POOLED 2014-2021]
+  v1 |e|>=0.5 (live)                  1596 bets 58.7%   +189.6u CLV +0.559
+  v2 |e|>=0.62 (paper)                1520 bets 61.2%   +251.1u CLV +0.640
+  overlap: 836 games in both; same side in 836
+
+[PER SEASON]
+ season 2014: games 1293
+  v1                                    97 bets 51.5%     -1.5u CLV +0.567
+  v2                                    72 bets 49.3%     -4.2u CLV +0.361
+ season 2015: games 1465
+  v1                                   118 bets 49.6%     -6.2u CLV +0.237
+  v2                                   102 bets 61.2%    +16.5u CLV +0.500
+ season 2016: games 3433
+  v1                                   231 bets 55.9%    +14.7u CLV +0.385
+  v2                                   188 bets 55.4%    +10.7u CLV +0.551
+ season 2017: games 3405
+  v1                                   208 bets 59.6%    +28.7u CLV +0.418
+  v2                                   185 bets 57.7%    +18.5u CLV +0.632
+ season 2018: games 3464
+  v1                                   233 bets 50.7%     -7.5u CLV +0.513
+  v2                                   223 bets 58.4%    +25.4u CLV +0.531
+ season 2019: games 4563
+  v1                                   200 bets 57.8%    +19.9u CLV +0.823
+  v2                                   237 bets 59.8%    +32.5u CLV +0.605
+ season 2020: games 4339
+  v1                                   396 bets 71.2%   +139.0u CLV +0.583
+  v2                                   385 bets 71.2%   +136.5u CLV +0.644
+ season 2021: games 3048
+  v1                                   113 bets 53.6%     +2.5u CLV +1.044
+  v2                                   128 bets 58.6%    +15.2u CLV +1.297
+  CLV(v2) - CLV(v1) by season: {2014: np.float64(-0.206), 2015: np.float64(0.263), 2016: np.float64(0.165), 2017: np.float64(0.214), 2018: np.float64(0.019), 2019: np.float64(-0.217), 2020: np.float64(0.061), 2021: np.float64(0.253)}
+  units(v2) - units(v1) by season: {2014: np.float64(-2.6), 2015: np.float64(22.7), 2016: np.float64(-4.0), 2017: np.float64(-10.3), 2018: np.float64(32.9), 2019: np.float64(12.6), 2020: np.float64(-2.5), 2021: np.float64(12.6)}
+
+P1 D = CLV(v2) - CLV(v1) = +0.082 [90% +0.022, +0.141] -> True
+P2 units v2 +251.1 >= v1 +189.6 (difference +61.5, 90% [+3.5, +120.3]) -> True
+P3 v2 CLV higher in 6 of 8 seasons (need 5) -> True
+VERDICT: PASS
+
+[DIAGNOSTICS, decide nothing]
+  v1 back-to-back games                159 bets 58.3%    +17.7u CLV +0.311
+  v2 back-to-back games                274 bets 59.6%    +36.5u CLV +0.650
+  v1 non-back-to-back                 1437 bets 58.8%   +171.9u CLV +0.586
+  v2 non-back-to-back                 1246 bets 61.6%   +214.5u CLV +0.638
+  v2 matched to v1 count (cut 0.611)  1596 bets 61.1%   +261.1u CLV +0.630
+
+[2012-13 separately, decides nothing] games 392
+  v1 |e|>=0.5                           75 bets 47.3%     -7.2u CLV +0.087
+  v2 |e|>=0.62                          43 bets 58.5%     +4.8u CLV +0.209
