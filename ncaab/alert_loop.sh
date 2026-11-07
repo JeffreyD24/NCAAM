@@ -19,7 +19,7 @@ busy() {   # 0 if the NCAAM daily job (which also writes ncaab/state) is running
 }
 
 save() {
-  for f in ncaab/state/dk_lines.csv ncaab/state/live_evals.csv ncaab/state/live_bets.csv ncaab/state/live_poll.json ncaab/state/live_stop.txt ncaab/state/heartbeat_alert.txt; do
+  for f in ncaab/state/dk_lines.csv ncaab/state/live_evals.csv ncaab/state/live_bets.csv ncaab/state/live_paper_v2.csv ncaab/state/live_poll.json ncaab/state/live_stop.txt ncaab/state/heartbeat_alert.txt; do
     if [ -f "$f" ]; then git add "$f"; fi
   done
   git diff --cached --quiet && return 0
